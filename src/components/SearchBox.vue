@@ -8,6 +8,27 @@
         </el-input>
       </el-form-item>
     </el-form>
+    <div class="lists">
+      <div class="list">
+        <el-table :data="newListData">
+          <el-table-column label="新鲜榜">
+            <template slot-scope="scope">
+              <el-button type="text" @click="showArticle(newListData[scope.$index].index)"><span class="indexIcon">{{scope.$index + 1}}</span>{{ newListData[scope.$index].title}}</el-button>
+<!--              scope从0开始-->
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="list">
+        <el-table :data="hotListData">
+          <el-table-column label="热搜榜">
+            <template slot-scope="scope">
+              <el-button type="text" @click="showArticle(hotListData[scope.$index].index)"><span class="indexIcon">{{scope.$index + 1}}</span>{{ hotListData[scope.$index].title}}</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,22 +37,118 @@ export default {
   name: 'SearchBox',
   data () {
     return {
-      keyWord: ''
+      keyWord: '',
+      newListData: [
+        {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '2',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '3',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '4',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '5',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '6',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '7',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '8',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '9',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '10',
+          title: '张文宏谈五一假期出游'
+        }],
+      hotListData: [
+        {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }, {
+          id: '1',
+          title: '张文宏谈五一假期出游'
+        }]
     }
   },
   methods: {
-    search () {}
+    search () {
+      this.$route.push({ name: 'XXX', params: { keyWord: this.keyWord } })
+    },
+    showArticle (articleId) {
+      // this.$router.push({ name: 'XXXXX', params: { articleId: articleId } })
+    }
   }
 }
 </script>
 
 <style lang="less">
+  .lists {
+    background-color: antiquewhite;
+    width: 80%;
+    height: 72%;
+    margin: 0 auto;
+  }
+  .list {
+    background-color: darksalmon;
+    float: left;
+    width: 45%;
+    height: 90%;
+    margin: 2.5%;
+  }
+  #indexSearch .el-table td, .el-table th.is-leaf{
+    padding: 5px;
+  }
+  #indexSearch .el-button{
+    padding: 0px;
+  }
+  #indexSearch .indexIcon {
+    color: white;
+    background-color: #67a5e8;
+    margin-right: 4px;
+    padding: 0px 4px;
+  }
+  #indexSearch tr:nth-child(10) > td > div > button > span > span{
+    padding: 0px 1px;
+  }
   #indexSearch {
     text-align: center;
     padding-top: 80px;
     background-color: lightblue;
     height: 100%;
-    /*width: 100%;*/
   }
   #indexSearch .el-form-item {
     width: 100%;
