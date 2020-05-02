@@ -13,7 +13,7 @@
         <el-table :data="newListData">
           <el-table-column label="新鲜榜">
             <template slot-scope="scope">
-              <el-button type="text" @click="showArticle(newListData[scope.$index].index)"><span class="indexIcon">{{scope.$index + 1}}</span>{{ newListData[scope.$index].title}}</el-button>
+              <el-button type="text" @click="showArticle(newListData[scope.$index].id)"><span class="indexIcon">{{scope.$index + 1}}</span><el-link :underline="false">{{ newListData[scope.$index].title}}</el-link></el-button>
 <!--              scope从0开始-->
             </template>
           </el-table-column>
@@ -23,7 +23,7 @@
         <el-table :data="hotListData">
           <el-table-column label="热搜榜">
             <template slot-scope="scope">
-              <el-button type="text" @click="showArticle(hotListData[scope.$index].index)"><span class="indexIcon">{{scope.$index + 1}}</span>{{ hotListData[scope.$index].title}}</el-button>
+              <el-button type="text" @click="showArticle(hotListData[scope.$index].id)"><span class="indexIcon">{{scope.$index + 1}}</span><el-link :underline="false">{{ hotListData[scope.$index].title}}</el-link></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -37,7 +37,7 @@ export default {
   name: 'SearchBox',
   data () {
     return {
-      keyWord: '',
+      keyWord: ' ',
       newListData: [
         {
           id: '1',
@@ -104,11 +104,29 @@ export default {
         }]
     }
   },
+  created () {
+    // 访问新鲜榜、热搜榜接口，暂时用findAll代替，取前20条
+    this.$http.get('bbs/findAll').then(response => {
+      this.newListData = []
+      this.hotListData = []
+      var listData = response.data.content
+      // console.log(listData)
+      for (let i = 0; i < 10; i++) {
+        this.newListData.push(listData[i])
+        this.hotListData.push(listData[i + 10])
+      }
+    })
+  },
   methods: {
     search () {
-      this.$route.push({ name: 'XXX', params: { keyWord: this.keyWord } })
+      // console.log(this.keyWord)
+      this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
     },
     showArticle (articleId) {
+      console.log(articleId)
+      this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
+        console.log(response)
+      })
       // this.$router.push({ name: 'XXXXX', params: { articleId: articleId } })
     }
   }
@@ -116,14 +134,14 @@ export default {
 </script>
 
 <style lang="less">
-  .lists {
-    background-color: antiquewhite;
+  #indexSearch .lists {
+    /*background-color: antiquewhite;*/
     width: 80%;
     height: 72%;
     margin: 0 auto;
   }
-  .list {
-    background-color: darksalmon;
+  #indexSearch .list {
+    /*background-color: darksalmon;*/
     float: left;
     width: 45%;
     height: 90%;
@@ -147,7 +165,7 @@ export default {
   #indexSearch {
     text-align: center;
     padding-top: 80px;
-    background-color: lightblue;
+    /*background-color: lightblue;*/
     height: 100%;
   }
   #indexSearch .el-form-item {

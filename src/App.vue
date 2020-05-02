@@ -6,13 +6,9 @@
 </template>
 
 <script>
-// import SearchBox from './components/SearchBox'
 
 export default {
   name: 'app'
-  // components: {
-  //   SearchBox
-  // }
 }
 </script>
 
