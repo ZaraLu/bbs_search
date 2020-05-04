@@ -1,32 +1,43 @@
 <template>
   <div id="indexSearch">
-    <img src="../assets/logo.png">
+    <img src="../assets/logo1.png">
     <el-form size='mini' :inline='true'>
       <el-form-item label=''>
-        <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>
+        <el-input placeholder='搜索北邮人论坛，请输入关键词' size="medium" v-model="keyWord" clearable>
           <el-button slot="append" icon="el-icon-search" @click='search' size="medium"></el-button>
         </el-input>
       </el-form-item>
     </el-form>
     <div class="lists">
       <div class="list">
-        <el-table :data="newListData">
-          <el-table-column label="新鲜榜">
-            <template slot-scope="scope">
-              <el-button type="text" @click="showArticle(newListData[scope.$index].id)"><span class="indexIcon">{{scope.$index + 1}}</span><el-link :underline="false">{{ newListData[scope.$index].title}}</el-link></el-button>
-<!--              scope从0开始-->
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-card shadow="hover">
+          <div slot="header">
+            <span>新鲜榜</span>
+          </div>
+          <div v-for="(item, index) in newListData" :key="index">
+            <div>
+              <el-link :underline="false" @click="showArticle(newListData[index].id)">
+                <span class="indexIcon">{{index + 1}}</span>{{ newListData[index].title}}
+              </el-link>
+            </div>
+            <el-divider v-if="index!=9"></el-divider>
+          </div>
+        </el-card>
       </div>
       <div class="list">
-        <el-table :data="hotListData">
-          <el-table-column label="热搜榜">
-            <template slot-scope="scope">
-              <el-button type="text" @click="showArticle(hotListData[scope.$index].id)"><span class="indexIcon">{{scope.$index + 1}}</span><el-link :underline="false">{{ hotListData[scope.$index].title}}</el-link></el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-card shadow="hover">
+          <div slot="header">
+            <span>热搜榜</span>
+          </div>
+          <div v-for="(item, index) in hotListData" :key="index">
+            <div>
+              <el-link :underline="false" @click="showArticle(hotListData[index].id)">
+                <span class="indexIcon">{{index + 1}}</span>{{ hotListData[index].title}}
+              </el-link>
+            </div>
+            <el-divider v-if="index!=9"></el-divider>
+          </div>
+        </el-card>
       </div>
     </div>
   </div>
@@ -37,7 +48,7 @@ export default {
   name: 'SearchBox',
   data () {
     return {
-      keyWord: ' ',
+      keyWord: '',
       newListData: [
         {
           id: '1',
@@ -123,11 +134,11 @@ export default {
       this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
     },
     showArticle (articleId) {
-      console.log(articleId)
-      this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
-        console.log(response)
-      })
-      // this.$router.push({ name: 'XXXXX', params: { articleId: articleId } })
+      // console.log(articleId)
+      // this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
+      //   console.log(response)
+      // })
+      this.$router.push({ name: 'ArticlePage', params: { articleId: articleId } })
     }
   }
 }
@@ -146,12 +157,20 @@ export default {
     width: 45%;
     height: 90%;
     margin: 2.5%;
+    text-align: left;
   }
-  #indexSearch .el-table td, .el-table th.is-leaf{
-    padding: 5px;
+  #indexSearch .el-link--inner{
+    overflow: hidden;
+    display: -webkit-box;//对象作为弹性伸缩盒子模型显示
+    -webkit-box-orient: vertical;//设置或检索伸缩盒对象的子元素的排列方式
+    -webkit-line-clamp: 1;//溢出省略的界限
   }
-  #indexSearch .el-button{
-    padding: 0px;
+  #indexSearch .el-card__body {
+    padding: 12px;
+  }
+  #indexSearch .el-divider--horizontal {
+    height: 1px;
+    margin: 10px 0;
   }
   #indexSearch .indexIcon {
     color: white;
@@ -159,7 +178,16 @@ export default {
     margin-right: 4px;
     padding: 0px 4px;
   }
-  #indexSearch tr:nth-child(10) > td > div > button > span > span{
+  #indexSearch div.el-card__body > div:nth-child(1) > div:nth-child(1) > a > span > span{
+    background-color: crimson;
+  }
+  #indexSearch div.el-card__body > div:nth-child(2) > div:nth-child(1) > a > span > span{
+    background-color: darkorange;
+  }
+  #indexSearch div.el-card__body > div:nth-child(3) > div:nth-child(1) > a > span > span{
+    background-color: #e8c60f;
+  }
+  #indexSearch div:nth-child(10) > div > a > span > span{
     padding: 0px 1px;
   }
   #indexSearch {

@@ -14,7 +14,7 @@
             <el-button type="text" icon="el-icon-sort-down" @click='searchTime'>时间</el-button>
             <el-button type="text" icon="el-icon-sort-down" @click='searchReplyCount'>回复数</el-button>
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="sortRole">
             <el-date-picker
               v-model="timeRange"
               type="daterange"
@@ -37,18 +37,25 @@
           </div>
         </div>
         <div class="hotList">
-          <el-table :data="hotListData">
-            <el-table-column label="热搜榜">
-              <template slot-scope="scope">
-                <el-button type="text" @click="showArticle(hotListData[scope.$index].id)"><span class="indexIcon">{{scope.$index + 1}}</span><el-link :underline="false">{{ hotListData[scope.$index].title}}</el-link></el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+          <el-card shadow="hover">
+            <div slot="header">
+              <span>热搜榜</span>
+            </div>
+            <div v-for="(item, index) in hotListData" :key="index">
+              <div>
+                <el-link :underline="false" @click="showArticle(hotListData[index].id)">
+                  <span class="indexIcon">{{index + 1}}</span>{{ hotListData[index].title}}
+                </el-link>
+              </div>
+              <el-divider v-if="index!=9"></el-divider>
+            </div>
+          </el-card>
         </div>
       </div>
       <div class="clear"></div>
       <div class="foot">
         <el-pagination
+          background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :hide-on-single-page="true"
@@ -178,7 +185,6 @@ export default {
     }
   },
   created () {
-    // console.log(this.$route.params)
     this.keyWord = this.$route.params.keyWord
   },
   methods: {
@@ -192,6 +198,7 @@ export default {
       //   }
       // }).then(response => {
       //   console.log(response.data.content)
+      //   this.articleListData = response.data.content
       // })
     },
     searchTime () {
@@ -227,11 +234,11 @@ export default {
       console.log(this.endTime)
     },
     showArticle (articleId) {
-      console.log(articleId)
-      this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
-        console.log(response)
-      })
-      // this.$router.push({ name: 'XXXXX', params: { articleId: articleId } })
+      // console.log(articleId)
+      // this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
+      //   console.log(response)
+      // })
+      this.$router.push({ name: 'ArticlePage', params: { articleId: articleId } })
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
@@ -253,9 +260,12 @@ export default {
     height: 100%;
   }
   #listPage .head {
-    background-color: #B3C0D1;
+    /*background-color: #B3C0D1;*/
     color: #333;
-    height: 150px;
+    height: 100px;
+    width: 1260px;
+    padding-top: 15px;
+    padding-left: 5px;
   }
   #listPage .log {
     float: left;
@@ -283,6 +293,10 @@ export default {
   #listPage .searchBox .el-input--medium .el-input__inner {
     height: 50px;
   }
+  #listPage .sortRole {
+    margin-left: 20px;
+    margin-top: 10px;
+  }
   #listPage .el-button [class*=el-icon-]+span {
     margin-left: 0px;
   }
@@ -295,28 +309,28 @@ export default {
   }
 
   #listPage .main {
-    background-color: #333333;
-    width: 960px;
-    margin: 0px 100px;
-    height: auto;
+    /*background-color: #333333;*/
+    width: 1260px;
+    height: 850px;
   }
   #listPage .articleList {
-    /*background-color: #E9EEF3;*/
+    background-color: #ffffff;
     color: #333;
-    width: 70%;
+    width: 600px;
     float: left;
     /*text-align: center;*/
-    height: 100%;
-    /*padding: 0px 10px;*/
+    height: 850px;
+    padding: 10px 100px;
   }
   #listPage .articleList .el-divider {
-     background-color: #ffffff;
+    background-color: #ffffff;
     position: relative;
   }
   #listPage .articleList .el-link.el-link--default {
-    /*color: #606266;*/
-    font-weight: 800;
-    font-size: 18px;
+    color: #233ba6;
+    font-weight: 400;
+    font-size: 20px;
+    font-family: 黑体;
   }
   #listPage .articleList .content {
     overflow: hidden;
@@ -325,18 +339,54 @@ export default {
     display: -webkit-box;//对象作为弹性伸缩盒子模型显示
     -webkit-box-orient: vertical;//设置或检索伸缩盒对象的子元素的排列方式
     -webkit-line-clamp: 2;//溢出省略的界限
+    padding-top: 5px;
+    font-size: 12px;
+    color: black;
   }
   #listPage .hotList {
-    background-color: #D3DCE6;
+    /*background-color: #e2efb1;*/
     color: #333;
-    width: 30%;
-    text-align: center;
+    width: 350px;
+    text-align: left;
     /*line-height: 200px;*/
     height: 100%;
     float: left;
   }
+  #listPage .el-link--inner{
+    overflow: hidden;
+    display: -webkit-box;//对象作为弹性伸缩盒子模型显示
+    -webkit-box-orient: vertical;//设置或检索伸缩盒对象的子元素的排列方式
+    -webkit-line-clamp: 1;//溢出省略的界限
+  }
+  #listPage .el-card__body {
+    padding: 12px;
+  }
+  #listPage .el-divider--horizontal {
+    height: 1px;
+    margin: 10px 0;
+  }
+  #listPage .indexIcon {
+    color: white;
+    background-color: #67a5e8;
+    margin-right: 4px;
+    padding: 0px 4px;
+  }
+  #listPage div.el-card__body > div:nth-child(1) > div:nth-child(1) > a > span > span{
+    background-color: crimson;
+  }
+  #listPage div.el-card__body > div:nth-child(2) > div:nth-child(1) > a > span > span{
+    background-color: darkorange;
+  }
+  #listPage div.el-card__body > div:nth-child(3) > div:nth-child(1) > a > span > span{
+    background-color: #e8c60f;
+  }
+  #listPage div:nth-child(10) > div > a > span > span{
+    padding: 0px 1px;
+  }
+
   #listPage .foot {
     /*background-color: #d6f3d6;*/
     padding-left: 100px;
+    padding-bottom: 40px;
   }
 </style>

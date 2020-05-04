@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SearchBox from '../views/SearchBox.vue'
-import listPage from '../views/listPage' // 导入某个页面
+import listPage from '../views/listPage'
+import ArticlePage from '../views/ArticlePage'
 
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/index', component: SearchBox },
   { path: '/', redirect: '/index' },
-  { path: '/listPage', name: 'listPage', component: listPage }
+  { path: '/listPage', name: 'listPage', component: listPage },
+  { path: '/articlePage', name: 'ArticlePage', component: ArticlePage }
 ]
 
 const router = new VueRouter({
