@@ -3,7 +3,7 @@
     <img src="../assets/logo1.png">
     <el-form size='mini' :inline='true'>
       <el-form-item label=''>
-        <el-input placeholder='搜索北邮人论坛，请输入关键词' size="medium" v-model="keyWord" clearable>
+        <el-input placeholder='搜索北邮人论坛，请输入关键词' size="medium" v-model="keyWord" @keyup.enter.native="search" clearable>
           <el-button slot="append" icon="el-icon-search" @click='search' size="medium"></el-button>
         </el-input>
       </el-form-item>
