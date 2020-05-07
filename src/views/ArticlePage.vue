@@ -15,7 +15,7 @@
         </div>
       </el-header>
       <el-main>
-        <el-card class="box-card">
+        <el-card class="box-card" shadow="hover">
           <el-row :gutter="20">
             <el-col :span="16"><div class="title">{{title}}</div></el-col>
             <el-col :span="8"><div class="send_time">{{send_time}}</div></el-col>
@@ -29,6 +29,22 @@
             <el-col :span="6"><div class="reply_count">回帖数：{{reply_count}}</div></el-col>
           </el-row>
         </el-card>
+        <div v-for="art in articleListData" :key="art.id">
+          <el-card class="box-card" shadow="hover">
+            <el-row :gutter="20">
+              <el-col :span="16"><div class="title">{{art.title}}</div></el-col>
+              <el-col :span="8"><div class="send_time">{{art.send_time}}</div></el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24"><div class="content">{{art.content}}</div></el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="6"><div class="sender">作者：{{art.sender}}</div></el-col>
+              <el-col :span="6"><div class="partition">版面：{{art.partition}}</div></el-col>
+              <el-col :span="6"><div class="reply_count">回帖数：{{art.reply_count}}</div></el-col>
+            </el-row>
+          </el-card>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -46,7 +62,53 @@ export default {
       send_time: '2019-10-21',
       sender: 'buptvis',
       title: '【可视化案例】Life in the camps 集中营里的生活',
-      url: 'https://bbs.byr.cn/article/Visualization/463'
+      url: 'https://bbs.byr.cn/article/Visualization/463',
+      articleListData: [
+        {
+          id: '1',
+          title: '张文宏谈五一假期出游',
+          send_time: '2019-10-21',
+          sender: 'buptvis',
+          reply_count: 3,
+          partition: 'Visualization',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '2',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '3',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '4',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '5',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '6',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '7',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '8',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '9',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }, {
+          id: '10',
+          title: '张文宏谈五一假期出游',
+          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+        }]
     }
   },
   created () {
