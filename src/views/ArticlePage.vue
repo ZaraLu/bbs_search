@@ -1,16 +1,37 @@
 <template>
-    <div>
-      <div>
-        <div class="head">标题：{{ title }}</div>
-        <div class="main">帖子正文：{{ content }}</div>
-      </div>
-<!--      <div>标题：{{ title }}</div>-->
-<!--      <div>作者：{{ sender }}</div>-->
-<!--      <div>发信区：{{ partition }}</div>-->
-<!--      <div>发信时间：{{ send_time }}</div>-->
-<!--      <div>帖子正文：{{ content }}</div>-->
-<!--      <div>回复数：{{ reply_count }}</div>-->
-    </div>
+  <div id="articlePage">
+    <el-container>
+      <el-header height="100px">
+        <div class="head">
+          <img class="log" src="../assets/logo1.png">
+          <el-form size='mini' :inline='true'>
+            <el-form-item class="searchBox">
+              <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>
+                <el-button slot="append" icon="el-icon-search" @click='searchDefault' size="medium"></el-button>
+              </el-input>
+            </el-form-item>
+            <div class="clear"></div>
+          </el-form>
+        </div>
+      </el-header>
+      <el-main>
+        <el-card class="box-card">
+          <el-row :gutter="20">
+            <el-col :span="16"><div class="title">{{title}}</div></el-col>
+            <el-col :span="8"><div class="send_time">{{send_time}}</div></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24"><div class="content">{{content}}</div></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6"><div class="sender">作者：{{sender}}</div></el-col>
+            <el-col :span="6"><div class="partition">版面：{{partition}}</div></el-col>
+            <el-col :span="6"><div class="reply_count">回帖数：{{reply_count}}</div></el-col>
+          </el-row>
+        </el-card>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script>
@@ -29,22 +50,120 @@ export default {
     }
   },
   created () {
-    // this.articleId = this.$route.params.articleId
-    // console.log(this.articleId)
-    // this.$http.get('bbs/findById', { params: { id: this.articleId } }).then(response => {
-    //   console.log(response.data)
-    //   const article = response.data
-    //   this.content = article.content
-    //   this.partition = article.partion
-    //   this.reply_count = article.reply_count
-    //   this.send_time = article.send_time
-    //   this.sender = article.sender
-    //   this.title = article.title
-    //   this.url = article.url
-    // })
+    this.keyWord = this.$route.params.keyWord
+  },
+  methods: {
+    searchDefault () {
+      this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
+    }
   }
 }
 </script>
 
 <style lang="less">
+  #articlePage .head {
+    /*background-color: #B3C0D1;*/
+    color: #333;
+    height: 100px;
+    width: 1260px;
+    padding-top: 15px;
+    padding-left: 5px;
+  }
+  #articlePage .log {
+    float: left;
+    height: 70px;
+    margin: 10px auto;
+  }
+  #articlePage .el-form {
+    float: left;
+    margin: 20px auto;
+  }
+  #articlePage .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+    margin-bottom: 0;
+  }
+  #articlePage .searchBox .el-form-item__content{
+    width: 500px;
+  }
+  #articlePage .searchBox .el-input__inner {
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+  }
+  #articlePage .searchBox .el-input-group__append, .el-input-group__prepend {
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+  }
+  #articlePage .searchBox .el-input-group{
+    width: 100%;
+  }
+  #articlePage .searchBox .el-input--medium .el-input__inner {
+    height: 50px;
+  }
+  #articlePage .sortRole {
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+  #articlePage .el-button [class*=el-icon-]+span {
+    margin-left: 0;
+  }
+  #articlePage .el-range-editor--mini.el-input__inner {
+    width: 205px;
+  }
+  #articlePage .timePicker{
+    width: 205px;
+    display: inline-block;
+  }
+
+  #articlePage .el-row {
+    margin-bottom: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  #articlePage .el-col {
+    border-radius: 4px;
+  }
+  #articlePage .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  #articlePage .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
+  }
+  #articlePage div.el-col-16:nth-child(2) {
+    padding-left: 100px;
+    padding-right: 10px;
+    padding-top: 20px;
+  }
+  #articlePage .title {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 10px auto;
+  }
+  #articlePage .send_time {
+    font-size: 15px;
+    text-align: right;
+    margin: 10px auto;
+  }
+  #articlePage div.el-card:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) {
+    margin: auto;
+  }
+  #articlePage div.el-card:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) {
+    margin: 5px auto;
+  }
+  #articlePage .content {
+    line-height: 1.6;
+    height: 200px;
+    overflow-y: scroll;
+    font-size: 14px;
+    letter-spacing: 0.069em;
+    font-weight: 300;
+  }
+  #articlePage .el-card {
+    border:1px solid #EBEEF5;
+    background-color:#FFF;
+    color:#303133;
+    transition:.3s;
+    margin-bottom: 30px;
+  }
 </style>
