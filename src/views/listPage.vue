@@ -4,7 +4,7 @@
         <img class="log" src="../assets/logo.png">
         <el-form size='mini' :inline='true'>
           <el-form-item class="searchBox">
-            <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>
+            <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' @keyup.enter.native='searchDefault' size="medium" v-model="keyWord" clearable>
               <el-button slot="append" icon="el-icon-search" @click='searchDefault' size="medium"></el-button>
             </el-input>
           </el-form-item>
