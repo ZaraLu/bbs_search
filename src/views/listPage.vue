@@ -1,7 +1,7 @@
-<template>
+<template xmlns:el-col="http://www.w3.org/1999/html">
     <div id="listPage">
       <div class="head">
-        <img class="log" src="../assets/logo.png">
+        <img class="log" src="../assets/logo1.png">
         <el-form size='mini' :inline='true'>
           <el-form-item class="searchBox">
             <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' @keyup.enter.native='searchDefault' size="medium" v-model="keyWord" clearable>
@@ -9,31 +9,79 @@
             </el-input>
           </el-form-item>
           <div class="clear"></div>
-          <el-form-item class="sortRole">
-            <el-button type="text" icon="el-icon-sort-down" @click='searchDefault'>相关性</el-button>
-            <el-button type="text" icon="el-icon-sort-down" @click='searchTime'>时间</el-button>
-            <el-button type="text" icon="el-icon-sort-down" @click='searchReplyCount'>回复数</el-button>
-          </el-form-item>
-          <el-form-item class="sortRole">
-            <el-date-picker
-              v-model="timeRange"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-          </el-form-item>
+<!--          <el-form-item class="sortRole">-->
+<!--            <el-button type="text" icon="el-icon-sort-down" @click='searchDefault'>相关性</el-button>-->
+<!--            <el-button type="text" icon="el-icon-sort-down" @click='searchTime'>时间</el-button>-->
+<!--            <el-button type="text" icon="el-icon-sort-down" @click='searchReplyCount'>回复数</el-button>-->
+<!--          </el-form-item>-->
+<!--          <el-form-item class="sortRole">-->
+<!--            <el-date-picker-->
+<!--              v-model="timeRange"-->
+<!--              type="daterange"-->
+<!--              align="right"-->
+<!--              unlink-panels-->
+<!--              range-separator="至"-->
+<!--              start-placeholder="开始日期"-->
+<!--              end-placeholder="结束日期"-->
+<!--              :picker-options="pickerOptions">-->
+<!--            </el-date-picker>-->
+<!--          </el-form-item>-->
         </el-form>
       </div>
       <div class="main">
+        <div class="option-list">
+          <el-row>
+            <el-col :span="4">
+              <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                  相关性<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item><el-button type="text"  @click='searchTime'>时间</el-button></el-dropdown-item>
+                  <el-dropdown-item><el-button type="text"  @click='searchReplyCount'>回复数</el-button></el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-col>
+
+            <el-col :span="20" align="right">
+              <el-popover placement="right"
+                          width="400"
+                          trigger="click">
+                <el-date-picker
+                  v-model="timeRange"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+                <el-button slot="reference" type="text">时间筛选</el-button>
+              </el-popover>
+            </el-col>
+          </el-row>
+        </div>
+        <el-divider style="margin-left: 100px" ></el-divider>
         <div class="articleList">
-          <div v-for="art in articleListData" :key="art.id">
-            <div><el-link @click="showArticle(art.id)" :underline="true">{{ art.title }}</el-link></div>
-            <div class="content">{{ art.content }}</div>
-            <el-divider></el-divider>
+          <div class="box-card" v-for="art in articleListData" :key="art.id">
+<!--            <div><el-link @click="showArticle(art.id)" :underline="true">{{ art.title }}</el-link></div>-->
+<!--            <div class="content">{{ art.content }}</div>-->
+<!--            <el-divider></el-divider>-->
+            <el-card shadow="hover">
+              <el-row :gutter="20">
+                <el-col :span="16"><div><el-link class="title" @click="showArticle(art.id)" :underline="true">{{ art.title }}</el-link></div></el-col>
+                <el-col :span="8" align="right"><div class="send_time">{{art.send_time}}</div></el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24"><div class="content">{{art.content}}</div></el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="6"><div class="sender">作者：{{art.sender}}</div></el-col>
+                <el-col :span="6"><div class="partition">版面：{{art.partition}}</div></el-col>
+                <el-col :span="6"><div class="reply_count">回帖数：{{art.reply_count}}</div></el-col>
+              </el-row>
+            </el-card>
           </div>
         </div>
         <div class="hotList">
@@ -110,6 +158,10 @@ export default {
         {
           id: '1',
           title: '张文宏谈五一假期出游',
+          send_time: '2019-10-21',
+          sender: 'buptvis',
+          reply_count: 3,
+          partition: 'Visualization',
           content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
         }, {
           id: '2',
@@ -260,7 +312,7 @@ export default {
     height: 100%;
   }
   #listPage .head {
-    /*background-color: #B3C0D1;*/
+    /*background-color: #F2F2F2;*/
     color: #333;
     height: 100px;
     width: 1260px;
@@ -269,9 +321,12 @@ export default {
   }
   #listPage .log {
     float: left;
+    height: 70px;
+    margin: 10px auto;
   }
   #listPage .el-form {
-    float: left;
+      float: left;
+      margin: 20px auto;
   }
   #listPage .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
     margin-bottom: 0px;
@@ -313,13 +368,43 @@ export default {
     width: 1260px;
     height: 850px;
   }
+  #listPage .option-list {
+    width: 600px;
+    padding-left: 100px;
+    padding-right: 100px;
+  }
+  #listPage .el-col-4 {
+    width:16.66667%;
+    margin: 10px auto;
+  }
+  #listPage .el-dropdown-link {
+    font-size: 12px;
+  }
+  #listPage .el-button--text {
+    color: #000;
+    padding-left:0;
+    padding-right:0
+  }
+  #listPage .el-popover__reference {
+    font-size: 12px;
+    font-weight: 300;
+  }
+
+  #listPage .main > div:nth-child(2) {
+    margin-left: 100px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-right: 100px;
+    height: 2px;
+    width: 600px;
+  }
   #listPage .articleList {
     background-color: #ffffff;
     color: #333;
     width: 600px;
     float: left;
     /*text-align: center;*/
-    height: 850px;
+    height: 1250px;
     padding: 10px 100px;
   }
   #listPage .articleList .el-divider {
@@ -338,10 +423,39 @@ export default {
     /*white-space: nowrap; //文本不换行，这样超出一行的部分被截取，显示...,上面三个可以实现单行文本溢出*/
     display: -webkit-box;//对象作为弹性伸缩盒子模型显示
     -webkit-box-orient: vertical;//设置或检索伸缩盒对象的子元素的排列方式
-    -webkit-line-clamp: 2;//溢出省略的界限
+    -webkit-line-clamp: 3;//溢出省略的界限
     padding-top: 5px;
     font-size: 12px;
     color: black;
+    line-height: 1.5;
+    font-size: 12px;
+    letter-spacing: 0.115em;
+    font-weight: 300;
+  }
+  #listPage .articleList .send_time {
+    font-size: 12px;
+    line-height: 1.7;
+    letter-spacing: 0.007em;
+    font-weight: 100;
+    font-style: normal;
+  }
+  #listPage .articleList .sender {
+    font-size: 12px;
+    font-weight: 100;
+    line-height: 1.8;
+  }
+  #listPage .articleList .partition {
+    font-size: 12px;
+    font-weight: 100;
+    line-height: 1.8;
+  }
+  #listPage .articleList .reply_count {
+    font-size: 12px;
+    font-weight: 100;
+    line-height: 1.8;
+  }
+  #listPage .articleList .box-card {
+    padding-bottom: 10px;
   }
   #listPage .hotList {
     /*background-color: #e2efb1;*/
