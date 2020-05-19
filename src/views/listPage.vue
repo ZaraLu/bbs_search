@@ -2,9 +2,9 @@
     <div id="listPage">
       <div class="head">
         <img class="log" src="../assets/logo1.png">
-        <el-form size='mini' :inline='true'>
+        <el-form size='mini' :inline='true' @submit.native.prevent>
           <el-form-item class="searchBox">
-            <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' @keyup.enter.native='searchDefault' size="medium" v-model="keyWord" clearable>
+            <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>
               <el-button slot="append" icon="el-icon-search" @click='searchDefault' size="medium"></el-button>
             </el-input>
           </el-form-item>
@@ -32,13 +32,14 @@
         <div class="option-list">
           <el-row>
             <el-col :span="4">
-              <el-dropdown trigger="click">
+              <el-dropdown trigger="click"> <!--@command="handleCommand"-->
                 <span class="el-dropdown-link">
-                  相关性<i class="el-icon-arrow-down el-icon--right"></i>
+                  排序方式<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item><el-button type="text"  @click='searchTime'>时间</el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button type="text"  @click='searchReplyCount'>回复数</el-button></el-dropdown-item>
+                  <el-dropdown-item><el-button type="text" command="相关性" @click='searchLatestReplyTime'>新鲜度</el-button></el-dropdown-item>
+                  <el-dropdown-item><el-button type="text" command="时间" @click='searchTime'>时间</el-button></el-dropdown-item>
+                  <el-dropdown-item><el-button type="text" command="回复数" @click='searchReplyCount'>回复数</el-button></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -108,7 +109,7 @@
           @current-change="handleCurrentChange"
           :hide-on-single-page="true"
           :current-page.sync="currentPage"
-          :page-size="10"
+          :page-size="PageSize"
           layout="total, prev, pager, next"
           :total=totalArticle>
         </el-pagination>
@@ -122,6 +123,7 @@ export default {
   data () {
     return {
       keyWord: '',
+      sortOption: 0,
       pickerOptions: {
         shortcuts: [
           {
@@ -233,14 +235,23 @@ export default {
           title: '张文宏谈五一假期出游'
         }],
       currentPage: 1, // 当前页数
-      totalArticle: 100 // 总条数
+      totalArticle: 100, // 总条数
+      PageSize: 10
     }
   },
   created () {
     this.keyWord = this.$route.params.keyWord
+    this.$http.get('bbs/getHotTopics').then(response => {
+      this.hotListData = []
+      var listData = response.data.content
+      for (let i = 0; i < 10; i++) {
+        this.hotListData.push(listData[i])
+      }
+    })
   },
   methods: {
     searchDefault () {
+      this.sortOption = 0
       // this.formatTime()
       // this.$http.get('bbs/findByTitle', {
       //   params: {
@@ -253,19 +264,42 @@ export default {
       //   this.articleListData = response.data.content
       // })
     },
+    searchLatestReplyTime () {
+      this.sortOption = 1
+      this.formatTime()
+      this.$http.get('/bbs/orderByLatestReplyTime', {
+        params: {
+          keywords: this.keyWord,
+          pageindex: this.currentPage,
+          pageSize: this.PageSize,
+          orderIndex: 1
+          // startTime: this.startTime,
+          // endTime: this.endTime
+        }
+      }).then(response => {
+        console.log(response.data)
+        this.articleListData = response.data
+      })
+    },
     searchTime () {
-      // this.formatTime()
-      // this.$http.get('bbs/findByTitle', {
-      //   params: {
-      //     title: this.keyWord,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime
-      //   }
-      // }).then(response => {
-      //   console.log(response.data.content)
-      // })
+      this.sortOption = 2
+      this.formatTime()
+      this.$http.get('/bbs/sortBySendtime', {
+        params: {
+          keywords: this.keyWord,
+          pageindex: this.currentPage,
+          pageSize: this.PageSize,
+          orderIndex: 1
+          // startTime: this.startTime,
+          // endTime: this.endTime
+        }
+      }).then(response => {
+        console.log(response.data)
+        this.articleListData = response.data
+      })
     },
     searchReplyCount () {
+      this.sortOption = 3
       // this.formatTime()
       // this.$http.get('bbs/findByTitle', {
       //   params: {
@@ -298,6 +332,18 @@ export default {
     handleCurrentChange (val) {
       // 处理当前页变动时候触发的事件
       console.log(`当前页: ${val}`)
+      if (this.sortOption === 0) {
+        this.searchDefault()
+      } else if (this.sortOption === 1) {
+        this.searchLatestReplyTime()
+      } else if (this.sortOption === 2) {
+        this.searchTime()
+      } else {
+        this.searchReplyCount()
+      }
+    },
+    handleCommand (command) {
+      this.$message('click on item ' + command)
     }
   }
 }
@@ -404,7 +450,7 @@ export default {
     width: 600px;
     float: left;
     /*text-align: center;*/
-    height: 1250px;
+    height: 1400px;
     padding: 10px 100px;
   }
   #listPage .articleList .el-divider {

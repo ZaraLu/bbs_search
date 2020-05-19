@@ -1,10 +1,10 @@
 <template>
   <div id="indexSearch">
     <img src="../assets/logo1.png">
-    <el-form size='mini' :inline='true'>
+    <el-form size='mini' :inline='true' @submit.native.prevent>
       <el-form-item label=''>
-        <el-input placeholder='搜索北邮人论坛，请输入关键词' size="medium" v-model="keyWord" @keyup.enter.native="search" clearable>
-          <el-button slot="append" icon="el-icon-search" @click='search' size="medium"></el-button>
+        <el-input placeholder='搜索北邮人论坛，请输入关键词' size="medium" v-model="keyWord" clearable>
+          <el-button slot="append" icon="el-icon-search" native-type="submit" @click='search' size="medium"></el-button>
         </el-input>
       </el-form-item>
     </el-form>
@@ -116,21 +116,25 @@ export default {
     }
   },
   created () {
-    // 访问新鲜榜、热搜榜接口，暂时用findAll代替，取前20条
-    this.$http.get('bbs/findAll').then(response => {
-      this.newListData = []
+    // 访问新鲜榜、热搜榜接口，取前10条
+    this.$http.get('bbs/getHotTopics').then(response => {
       this.hotListData = []
       var listData = response.data.content
-      // console.log(listData)
       for (let i = 0; i < 10; i++) {
-        this.newListData.push(listData[i])
-        this.hotListData.push(listData[i + 10])
+        this.hotListData.push(listData[i])
+      }
+    })
+    this.$http.get('bbs/getHotTopics').then(response => {
+      this.newListData = []
+      var listData = response.data.content
+      for (let i = 0; i < 10; i++) {
+        this.newListData.push(listData[9 - i])
       }
     })
   },
   methods: {
     search () {
-      // console.log(this.keyWord)
+      console.log(this.keyWord)
       this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
     },
     showArticle (articleId) {
