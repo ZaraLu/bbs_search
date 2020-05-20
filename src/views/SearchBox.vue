@@ -27,7 +27,7 @@
       <div class="list">
         <el-card shadow="hover">
           <div slot="header">
-            <span>热搜榜</span>
+            <span>热度榜</span>
           </div>
           <div v-for="(item, index) in hotListData" :key="index">
             <div>

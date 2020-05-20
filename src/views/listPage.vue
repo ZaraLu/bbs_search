@@ -71,11 +71,16 @@
 <!--            <el-divider></el-divider>-->
             <el-card shadow="hover">
               <el-row :gutter="20">
-                <el-col :span="16"><div><el-link class="title" @click="showArticle(art.id)" :underline="true">{{ art.title }}</el-link></div></el-col>
+                <el-col :span="16">
+                  <div><el-link class="title" @click="showArticle(art.id)" :underline="true">
+                    <div v-html="highlights(art.title)"></div>
+                  </el-link></div>
+                </el-col>
                 <el-col :span="8" align="right"><div class="send_time">{{art.send_time}}</div></el-col>
               </el-row>
               <el-row>
-                <el-col :span="24"><div class="content">{{art.content}}</div></el-col>
+                <el-col :span="24"><div class="content" v-html="highlights(art.content)">
+                </div></el-col>
               </el-row>
               <el-row>
                 <el-col :span="6"><div class="sender">作者：{{art.sender}}</div></el-col>
@@ -88,7 +93,7 @@
         <div class="hotList">
           <el-card shadow="hover">
             <div slot="header">
-              <span>热搜榜</span>
+              <span>热度榜</span>
             </div>
             <div v-for="(item, index) in hotListData" :key="index">
               <div>
@@ -279,6 +284,7 @@ export default {
       }).then(response => {
         console.log(response.data)
         this.articleListData = response.data
+        this.highlights()
       })
     },
     searchTime () {
@@ -311,6 +317,7 @@ export default {
       //   console.log(response.data.content)
       // })
     },
+    // 处理时间格式
     formatTime () {
       const start = new Date(this.timeRange[0])
       const end = new Date(this.timeRange[1])
@@ -318,6 +325,17 @@ export default {
       this.endTime = end.getFullYear() + '-' + end.getMonth() + '-' + end.getDate()
       console.log(this.startTime)
       console.log(this.endTime)
+    },
+    // 高亮关键字
+    highlights (val) {
+      // console.log(val + ' 变色')
+      val = val + ''
+      const replaceReg = new RegExp(this.keyWord, 'g')
+      if (val.indexOf(this.keyWord) !== -1 && this.keyWord !== '') {
+        return val.replace(replaceReg, '<span class="highlights-text">' + this.keyWord + '</span>')
+      } else {
+        return val
+      }
     },
     showArticle (articleId) {
       // console.log(articleId)
@@ -363,12 +381,12 @@ export default {
     height: 100px;
     width: 1260px;
     padding-top: 15px;
-    padding-left: 5px;
+    padding-left: 20px;
   }
   #listPage .log {
     float: left;
     height: 70px;
-    margin: 10px auto;
+    margin: 10px 5px;
   }
   #listPage .el-form {
       float: left;
@@ -378,7 +396,7 @@ export default {
     margin-bottom: 0px;
   }
   #listPage .searchBox .el-form-item__content{
-    width: 500px;
+    width: 600px;
   }
   #listPage .searchBox .el-input__inner {
     border-top-left-radius: 25px;
@@ -549,4 +567,8 @@ export default {
     padding-left: 100px;
     padding-bottom: 40px;
   }
+
+  .highlights-text {
+     color: #ff5134;
+   }
 </style>
