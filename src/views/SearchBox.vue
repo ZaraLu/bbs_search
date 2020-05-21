@@ -19,6 +19,8 @@
               <i class="el-icon-delete"></i>清空历史记录
             </dt>
             <el-tag
+              @click="searchHandler(search)"
+              @close="closeHandler(search)"
               v-for="search in historySearchList"
               :key="search.id"
               closable
@@ -178,6 +180,18 @@ export default {
     },
     enterSearchBoxHanlder () {
       clearTimeout(this.searchBoxTimeout)
+    },
+    searchHandler (search) {
+      this.keyWord = search.name
+      this.search()
+    },
+    closeHandler (search) {
+      this.historySearchList.splice(this.historySearchList.indexOf(search), 1)
+      Store.saveHistory(this.historySearchList)
+      clearTimeout(this.searchBoxTimeout)
+      if (this.historySearchList.length === 0) {
+        this.history = false
+      }
     },
     removeAllHistory () {
       Store.removeAllHistory()
