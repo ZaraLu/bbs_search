@@ -3,9 +3,33 @@
     <img src="../assets/logo1.png">
     <el-form size='mini' :inline='true' @submit.native.prevent>
       <el-form-item label=''>
-        <el-input placeholder='搜索北邮人论坛，请输入关键词' size="medium" v-model="keyWord" clearable>
+        <el-input @focus="focus" @blur="blur" @keyup.enter.native="search" placeholder='搜索北邮人论坛，请输入关键词' size="medium" v-model="keyWord" clearable>
           <el-button slot="append" icon="el-icon-search" native-type="submit" @click='search' size="medium"></el-button>
         </el-input>
+        <el-card
+          @mouseenter="enterSearchBoxHanlder"
+          v-if="isSearch"
+          class="box-card"
+          id="search-box"
+          style="position:relative;z-index:15"
+        >
+          <dl v-if="isHistorySearch">
+            <dt class="search-title" v-show="history">历史搜索</dt>
+            <dt class="remove-history" v-show="history" @click="removeAllHistory">
+              <i class="el-icon-delete"></i>清空历史记录
+            </dt>
+            <el-tag
+              v-for="search in historySearchList"
+              :key="search.id"
+              closable
+              :type="search.type"
+              style="margin-right:5px; margin-bottom:5px;"
+            >{{search.name}}</el-tag>
+          </dl>
+          <dl v-if="isSearchList">
+            <dd v-for="search in searchList" :key="search.id">{{search}}</dd>
+          </dl>
+        </el-card>
       </el-form-item>
     </el-form>
     <div class="lists">
@@ -44,11 +68,18 @@
 </template>
 
 <script>
+import RandomUtil from '../utils/randomUtil'
+import Store from '../utils/store'
 export default {
   name: 'SearchBox',
   data () {
     return {
       keyWord: '',
+      historySearchList: [],
+      searchList: ['暂无数据'],
+      isFocus: false,
+      history: false,
+      types: ['', 'success', 'info', 'warning', 'danger'],
       newListData: [
         {
           id: '1',
@@ -133,16 +164,57 @@ export default {
     })
   },
   methods: {
+    focus () {
+      this.isFocus = true
+      this.historySearchList =
+        Store.loadHistory() == null ? [] : Store.loadHistory()
+      this.history = this.historySearchList.length !== 0
+    },
+    blur () {
+      var self = this
+      this.searchBoxTimeout = setTimeout(function () {
+        self.isFocus = false
+      }, 300)
+    },
+    enterSearchBoxHanlder () {
+      clearTimeout(this.searchBoxTimeout)
+    },
+    removeAllHistory () {
+      Store.removeAllHistory()
+    },
     search () {
+      const n = RandomUtil.getRandomNumber(0, 5)
+      const exist =
+        this.historySearchList.filter(value => {
+          return value.name === this.keyWord
+        }).length !== 0
+      if (!exist) {
+        this.historySearchList.push({ name: this.keyWord, type: this.types[n] })
+        Store.saveHistory(this.historySearchList)
+      }
+      this.history = this.historySearchList.length !== 0
+
       console.log(this.keyWord)
       this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
     },
+
     showArticle (articleId) {
       // console.log(articleId)
       // this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
       //   console.log(response)
       // })
       this.$router.push({ name: 'ArticlePage', params: { articleId: articleId } })
+    }
+  },
+  computed: {
+    isHistorySearch () {
+      return this.isFocus && !this.keyWord
+    },
+    isSearchList () {
+      return this.isFocus && this.keyWord
+    },
+    isSearch () {
+      return this.isFocus
     }
   }
 }
@@ -219,5 +291,17 @@ export default {
   }
   #indexSearch .el-input--medium .el-input__inner {
     height: 50px;
+  }
+  .remove-history {
+    color: #bdbaba;
+    font-size: 15px;
+    float: right;
+    margin-top: -22px;
+  }
+  .search-title {
+    color: #bdbaba;
+    font-size: 15px;
+    margin-bottom: 5px;
+    float: left;
   }
 </style>
