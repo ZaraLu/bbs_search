@@ -1,7 +1,7 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
     <div id="listPage">
       <div class="head">
-        <img class="log" src="../assets/logo1.png">
+        <img class="log" src="../assets/logo1.png" @click="backToIndex">
         <el-form size='mini' :inline='true' @submit.native.prevent>
           <el-form-item class="searchBox">
             <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>
@@ -93,7 +93,7 @@
         <div class="hotList">
           <el-card shadow="hover">
             <div slot="header">
-              <span>热度榜</span>
+              <span>热搜榜</span>
             </div>
             <div v-for="(item, index) in hotListData" :key="index">
               <div>
@@ -246,85 +246,154 @@ export default {
   },
   created () {
     this.keyWord = this.$route.params.keyWord
-    this.$http.get('bbs/getHotTopics').then(response => {
+    this.$http.get('bbs/getTop10Byrs').then(response => {
       this.hotListData = []
-      var listData = response.data.content
+      var listData = response.data
       for (let i = 0; i < 10; i++) {
-        this.hotListData.push(listData[i])
+        this.hotListData.push(listData[i].body)
       }
     })
   },
   methods: {
     searchDefault () {
+      console.log('--------------searchDefault------------')
       this.sortOption = 0
-      // this.formatTime()
-      // this.$http.get('bbs/findByTitle', {
-      //   params: {
-      //     title: this.keyWord,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime
-      //   }
-      // }).then(response => {
-      //   console.log(response.data.content)
-      //   this.articleListData = response.data.content
-      // })
+      this.formatTime()
+      const paramsObj = {
+        keyword: this.keyWord,
+        pageIndex: this.currentPage,
+        foretime: this.startTime,
+        posttime: this.endTime
+      }
+      console.log('入参：')
+      console.log(paramsObj)
+
+      this.$http.get('/bbs/findByContentAndTitleAndSend_time', {
+        params: paramsObj
+      }).then(response => {
+        console.log('返回：')
+        console.log(response)
+        const dataObj = response.data
+        for (const key in dataObj) {
+          this.totalArticle = parseInt(key)
+          this.articleListData = dataObj[key].body.content
+          break
+        }
+        this.highlights()
+      })
     },
     searchLatestReplyTime () {
+      console.log('--------------searchLatestReplyTime------------')
       this.sortOption = 1
       this.formatTime()
+      const paramsObj = {
+        keywords: this.keyWord,
+        pageIndex: this.currentPage,
+        pageSize: this.PageSize,
+        orderIndex: 1,
+        foretime: this.startTime,
+        posttime: this.endTime
+      }
+      console.log('入参：')
+      console.log(paramsObj)
+
       this.$http.get('/bbs/orderByLatestReplyTime', {
-        params: {
-          keywords: this.keyWord,
-          pageindex: this.currentPage,
-          pageSize: this.PageSize,
-          orderIndex: 1
-          // startTime: this.startTime,
-          // endTime: this.endTime
-        }
+        params: paramsObj
       }).then(response => {
-        console.log(response.data)
-        this.articleListData = response.data
+        console.log('返回：')
+        console.log(response)
+
+        const objData = response.data.data
+        // console.log(objData.data)
+        this.articleListData = []
+        for (let i = 0; i < objData.data.length; i++) {
+          // console.log(arrData.data.data[i])
+          this.articleListData.push(objData.data[i])
+        }
+        this.totalArticle = objData.totleElements
         this.highlights()
       })
     },
     searchTime () {
+      console.log('--------------searchTime------------')
       this.sortOption = 2
       this.formatTime()
+      const paramsObj = {
+        keywords: this.keyWord,
+        pageindex: this.currentPage,
+        pageSize: this.PageSize,
+        orderIndex: 1,
+        fromDate: this.startTime,
+        toDate: this.endTime
+      }
+      console.log('入参：')
+      console.log(paramsObj)
+
       this.$http.get('/bbs/sortBySendtime', {
-        params: {
-          keywords: this.keyWord,
-          pageindex: this.currentPage,
-          pageSize: this.PageSize,
-          orderIndex: 1
-          // startTime: this.startTime,
-          // endTime: this.endTime
-        }
+        params: paramsObj
       }).then(response => {
-        console.log(response.data)
-        this.articleListData = response.data
+        console.log('返回：')
+        console.log(response)
+
+        const objData = response.data
+        // console.log(objData)
+        this.articleListData = []
+        for (let i = 0; i < objData.content.length; i++) {
+          // console.log(arrData.data.data[i])
+          this.articleListData.push(objData.content[i])
+        }
+        this.totalArticle = objData.totalElements
+        this.highlights()
       })
     },
     searchReplyCount () {
+      console.log('--------------searchReplyCount------------')
       this.sortOption = 3
-      // this.formatTime()
-      // this.$http.get('bbs/findByTitle', {
-      //   params: {
-      //     title: this.keyWord,
-      //     startTime: this.startTime,
-      //     endTime: this.endTime
-      //   }
-      // }).then(response => {
-      //   console.log(response.data.content)
-      // })
+      this.formatTime()
+      const paramsObj = {
+        keywords: this.keyWord,
+        pageindex: this.currentPage,
+        pageSize: this.PageSize,
+        orderIndex: 1,
+        foretime: this.startTime,
+        posttime: this.endTime
+      }
+      console.log('入参：')
+      console.log(paramsObj)
+
+      this.$http.get('/bbs/orderByReplyCount', {
+        params: paramsObj
+      }).then(response => {
+        console.log('返回：')
+        console.log(response)
+
+        const objData = response.data.data
+        // console.log(objData.data)
+        this.articleListData = []
+        for (let i = 0; i < objData.data.length; i++) {
+          // console.log(arrData.data.data[i])
+          this.articleListData.push(objData.data[i])
+        }
+        this.totalArticle = objData.totleElements
+        this.highlights()
+      })
     },
+
     // 处理时间格式
     formatTime () {
       const start = new Date(this.timeRange[0])
       const end = new Date(this.timeRange[1])
-      this.startTime = start.getFullYear() + '-' + start.getMonth() + '-' + start.getDate()
-      this.endTime = end.getFullYear() + '-' + end.getMonth() + '-' + end.getDate()
-      console.log(this.startTime)
-      console.log(this.endTime)
+      // console.log(start.getMonth())
+      // console.log(end.getMonth())
+      const sMonth = start.getMonth() + 1 < 10 ? '0' + (start.getMonth() + 1) : start.getMonth() + 1
+      const eMonth = end.getMonth() + 1 < 10 ? '0' + (end.getMonth() + 1) : end.getMonth() + 1
+      const sDate = start.getDate() < 10 ? '0' + start.getDate() : start.getDate()
+      const eDate = end.getDate() < 10 ? '0' + end.getDate() : end.getDate()
+
+      this.startTime = start.getFullYear() + '-' + sMonth + '-' + sDate
+      this.endTime = end.getFullYear() + '-' + eMonth + '-' + eDate
+      // console.log(this.startTime)
+      // console.log(this.endTime)
     },
     // 高亮关键字
     highlights (val) {
@@ -338,11 +407,17 @@ export default {
       }
     },
     showArticle (articleId) {
-      // console.log(articleId)
-      // this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
+      console.log('入参：')
+      console.log(articleId)
+      this.$http.get('bbs/addSearchNums', { params: { id: articleId } })
+      // .then(response => {
+      //   console.log('返回：')
       //   console.log(response)
       // })
       this.$router.push({ name: 'ArticlePage', params: { articleId: articleId } })
+    },
+    backToIndex () {
+      this.$router.push({ path: '/index' })
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)

@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  name: 'ArticlePage',
+  // name: 'ArticlePage',
   data () {
     return {
       search: '',

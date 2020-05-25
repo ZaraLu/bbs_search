@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import SearchBox from '../views/SearchBox.vue'
 import listPage from '../views/listPage'
-import ArticlePage from '../views/testPage'
+import ArticlePage from '../views/ArticlePage'
 
 Vue.use(VueRouter)
 

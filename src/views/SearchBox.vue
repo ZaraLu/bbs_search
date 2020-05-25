@@ -38,7 +38,7 @@
       <div class="list">
         <el-card shadow="hover">
           <div slot="header">
-            <span>新鲜榜</span>
+            <span>热度榜</span>
           </div>
           <div v-for="(item, index) in newListData" :key="index">
             <div>
@@ -53,7 +53,7 @@
       <div class="list">
         <el-card shadow="hover">
           <div slot="header">
-            <span>热度榜</span>
+            <span>热搜榜</span>
           </div>
           <div v-for="(item, index) in hotListData" :key="index">
             <div>
@@ -149,14 +149,15 @@ export default {
     }
   },
   created () {
-    // 访问新鲜榜、热搜榜接口，取前10条
-    this.$http.get('bbs/getHotTopics').then(response => {
+    // 访问热搜榜接口，取前10条
+    this.$http.get('bbs/getTop10Byrs').then(response => {
       this.hotListData = []
-      var listData = response.data.content
+      var listData = response.data
       for (let i = 0; i < 10; i++) {
-        this.hotListData.push(listData[i])
+        this.hotListData.push(listData[i].body)
       }
     })
+    // 访问热度榜接口，取前10条
     this.$http.get('bbs/getHotTopics').then(response => {
       this.newListData = []
       var listData = response.data.content
