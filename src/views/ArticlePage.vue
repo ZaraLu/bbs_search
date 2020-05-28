@@ -16,36 +16,38 @@
         </div>
       </el-header>
       <el-main>
-        <el-card class="box-card" shadow="hover">
+        <el-card class="box-card" shadow="always">
           <el-row :gutter="20">
             <el-col :span="16"><div class="title">{{title}}</div></el-col>
             <el-col :span="8"><div class="send_time">{{send_time}}</div></el-col>
           </el-row>
+          <el-divider></el-divider>
           <el-row>
             <el-col :span="24"><div class="content">{{content}}</div></el-col>
           </el-row>
+          <el-divider></el-divider>
           <el-row>
             <el-col :span="6"><div class="sender">作者：{{sender}}</div></el-col>
             <el-col :span="6"><div class="partition">版面：{{partition}}</div></el-col>
             <el-col :span="6"><div class="reply_count">回帖数：{{reply_count}}</div></el-col>
           </el-row>
         </el-card>
-        <div v-for="art in articleListData" :key="art.id">
-          <el-card class="box-card" shadow="hover">
-            <el-row :gutter="20">
-              <el-col :span="16"><div class="title">{{art.title}}</div></el-col>
-              <el-col :span="8"><div class="send_time">{{art.send_time}}</div></el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24"><div class="content">{{art.content}}</div></el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="6"><div class="sender">作者：{{art.sender}}</div></el-col>
-              <el-col :span="6"><div class="partition">版面：{{art.partition}}</div></el-col>
-              <el-col :span="6"><div class="reply_count">回帖数：{{art.reply_count}}</div></el-col>
-            </el-row>
-          </el-card>
-        </div>
+<!--        <div v-for="art in articleListData" :key="art.id">-->
+<!--          <el-card class="box-card" shadow="hover">-->
+<!--            <el-row :gutter="20">-->
+<!--              <el-col :span="16"><div class="title">{{art.title}}</div></el-col>-->
+<!--              <el-col :span="8"><div class="send_time">{{art.send_time}}</div></el-col>-->
+<!--            </el-row>-->
+<!--            <el-row>-->
+<!--              <el-col :span="24"><div class="content">{{art.content}}</div></el-col>-->
+<!--            </el-row>-->
+<!--            <el-row>-->
+<!--              <el-col :span="6"><div class="sender">作者：{{art.sender}}</div></el-col>-->
+<!--              <el-col :span="6"><div class="partition">版面：{{art.partition}}</div></el-col>-->
+<!--              <el-col :span="6"><div class="reply_count">回帖数：{{art.reply_count}}</div></el-col>-->
+<!--            </el-row>-->
+<!--          </el-card>-->
+<!--        </div>-->
       </el-main>
     </el-container>
   </div>
@@ -203,7 +205,7 @@ export default {
     padding-top: 20px;
   }
   #articlePage .title {
-    font-size: 17px;
+    font-size: 35px;
     font-weight: 600;
     margin: 10px auto;
   }
