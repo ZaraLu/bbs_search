@@ -159,8 +159,8 @@ export default {
         ]
       },
       timeRange: ['', ''],
-      startTime: '',
-      endTime: '',
+      startTime: null,
+      endTime: null,
       articleListData: [
         {
           id: '1',
@@ -245,14 +245,35 @@ export default {
     }
   },
   created () {
-    this.keyWord = this.$route.params.keyWord
-    this.$http.get('bbs/getTop10Byrs').then(response => {
-      this.hotListData = []
-      var listData = response.data
-      for (let i = 0; i < 10; i++) {
-        this.hotListData.push(listData[i].body)
-      }
-    })
+    console.log(this.$route.params)
+    const routeParams = this.$route.params
+
+    if ('keyWord' in routeParams) {
+      // 来自首页的跳转
+      this.keyWord = this.$route.params.keyWord
+
+      this.searchDefault()
+      this.$http.get('bbs/getTop10Byrs').then(response => {
+        this.hotListData = []
+        var listData = response.data
+        for (let i = 0; i < 10; i++) {
+          this.hotListData.push(listData[i].body)
+        }
+      })
+    } else if ('pageParams' in routeParams) {
+      // 来自详情页的跳转
+      const pageParam = this.$route.params.pageParams
+      this.keyWord = pageParam.keyWord
+      this.sortOption = pageParam.sortOption
+      this.timeRange = pageParam.timeRange
+      this.startTime = pageParam.startTime
+      this.endTime = pageParam.endTime
+      this.articleListData = pageParam.articleListData
+      this.hotListData = pageParam.hotListData
+      this.currentPage = pageParam.currentPage
+      this.totalArticle = pageParam.totalArticle
+      this.PageSize = pageParam.PageSize
+    }
   },
   methods: {
     searchDefault () {
@@ -381,6 +402,9 @@ export default {
 
     // 处理时间格式
     formatTime () {
+      if (this.timeRange[0].length === 0) {
+        return
+      }
       const start = new Date(this.timeRange[0])
       const end = new Date(this.timeRange[1])
       // console.log(start.getMonth())
@@ -414,7 +438,25 @@ export default {
       //   console.log('返回：')
       //   console.log(response)
       // })
-      this.$router.push({ name: 'ArticlePage', params: { articleId: articleId } })
+      this.$router.push(
+        {
+          name: 'ArticlePage',
+          params: {
+            articleId: articleId,
+            pageParams: {
+              keyWord: this.keyWord,
+              sortOption: this.sortOption,
+              timeRange: this.timeRange,
+              startTime: this.startTime,
+              endTime: this.endTime,
+              articleListData: this.articleListData,
+              hotListData: this.hotListData,
+              currentPage: this.currentPage, // 当前页数
+              totalArticle: this.totalArticle, // 总条数
+              PageSize: this.PageSize
+            }
+          }
+        })
     },
     backToIndex () {
       this.$router.push({ path: '/index' })

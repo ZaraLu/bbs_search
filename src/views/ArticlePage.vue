@@ -3,15 +3,16 @@
     <el-container>
       <el-header height="100px">
         <div class="head">
-          <img class="log" src="../assets/logo1.png">
-          <el-form size='mini' :inline='true'>
-            <el-form-item class="searchBox">
-              <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>
-                <el-button slot="append" icon="el-icon-search" @click='searchDefault' size="medium"></el-button>
-              </el-input>
-            </el-form-item>
-            <div class="clear"></div>
-          </el-form>
+          <el-button type="primary" icon="el-icon-arrow-left" @click="backToListPage">返回</el-button>
+<!--          <img class="log" src="../assets/logo1.png">-->
+<!--          <el-form size='mini' :inline='true'>-->
+<!--            <el-form-item class="searchBox">-->
+<!--              <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>-->
+<!--                <el-button slot="append" icon="el-icon-search" @click='searchDefault' size="medium"></el-button>-->
+<!--              </el-input>-->
+<!--            </el-form-item>-->
+<!--            <div class="clear"></div>-->
+<!--          </el-form>-->
         </div>
       </el-header>
       <el-main>
@@ -113,10 +114,14 @@ export default {
   },
   created () {
     this.keyWord = this.$route.params.keyWord
+    // console.log(this.$route.params.pageParams)
   },
   methods: {
-    searchDefault () {
-      this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
+    // searchDefault () {
+    //   this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
+    // },
+    backToListPage () {
+      this.$router.push({ name: 'listPage', params: { pageParams: this.$route.params.pageParams } })
     }
   }
 }
