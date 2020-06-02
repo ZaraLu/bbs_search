@@ -4,7 +4,7 @@
         <img class="log" src="../assets/logo1.png" @click="backToIndex">
         <el-form size='mini' :inline='true' @submit.native.prevent>
           <el-form-item class="searchBox">
-            <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>
+            <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' @keyup.enter.native="searchDefault" size="medium" v-model="keyWord" clearable>
               <el-button slot="append" icon="el-icon-search" @click='searchDefault' size="medium"></el-button>
             </el-input>
           </el-form-item>
@@ -159,8 +159,8 @@ export default {
         ]
       },
       timeRange: ['', ''],
-      startTime: null,
-      endTime: null,
+      startTime: '',
+      endTime: '',
       articleListData: [
         {
           id: '1',
@@ -253,13 +253,6 @@ export default {
       this.keyWord = this.$route.params.keyWord
 
       this.searchDefault()
-      this.$http.get('bbs/getTop10Byrs').then(response => {
-        this.hotListData = []
-        var listData = response.data
-        for (let i = 0; i < 10; i++) {
-          this.hotListData.push(listData[i].body)
-        }
-      })
     } else if ('pageParams' in routeParams) {
       // 来自详情页的跳转
       const pageParam = this.$route.params.pageParams
@@ -269,11 +262,18 @@ export default {
       this.startTime = pageParam.startTime
       this.endTime = pageParam.endTime
       this.articleListData = pageParam.articleListData
-      this.hotListData = pageParam.hotListData
+      // this.hotListData = pageParam.hotListData
       this.currentPage = pageParam.currentPage
       this.totalArticle = pageParam.totalArticle
       this.PageSize = pageParam.PageSize
     }
+    this.$http.get('bbs/getTop10Byrs').then(response => {
+      this.hotListData = []
+      var listData = response.data
+      for (let i = 0; i < 10; i++) {
+        this.hotListData.push(listData[i].body)
+      }
+    })
   },
   methods: {
     searchDefault () {
@@ -296,8 +296,8 @@ export default {
         console.log(response)
         const dataObj = response.data
         for (const key in dataObj) {
-          this.totalArticle = parseInt(key)
           this.articleListData = dataObj[key].body.content
+          this.totalArticle = dataObj[key].body.totalElements
           break
         }
         this.highlights()
@@ -403,6 +403,8 @@ export default {
     // 处理时间格式
     formatTime () {
       if (this.timeRange[0].length === 0) {
+        this.startTime = ''
+        this.endTime = ''
         return
       }
       const start = new Date(this.timeRange[0])
