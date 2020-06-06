@@ -152,17 +152,19 @@ export default {
     // 访问热搜榜接口，取前10条
     this.$http.get('bbs/getTop10Byrs').then(response => {
       this.hotListData = []
+      console.log(response)
       var listData = response.data
       for (let i = 0; i < 10; i++) {
         this.hotListData.push(listData[i].body)
       }
+      console.log(this.hotListData)
     })
     // 访问热度榜接口，取前10条
     this.$http.get('bbs/getHotTopics').then(response => {
       this.newListData = []
-      var listData = response.data.content
+      var listData = response.data.data
       for (let i = 0; i < 10; i++) {
-        this.newListData.push(listData[9 - i])
+        this.newListData.push(listData[i])
       }
     })
   },
