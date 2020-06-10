@@ -1,18 +1,10 @@
 <template>
   <div id="articlePage">
+    <el-backtop></el-backtop>
     <el-container>
       <el-header height="100px">
         <div class="head">
           <el-button type="primary" icon="el-icon-arrow-left" @click="backToListPage">返回</el-button>
-<!--          <img class="log" src="../assets/logo1.png">-->
-<!--          <el-form size='mini' :inline='true'>-->
-<!--            <el-form-item class="searchBox">-->
-<!--              <el-input placeholder='在北邮人论坛进行搜索，请输入关键词' size="medium" v-model="keyWord" clearable>-->
-<!--                <el-button slot="append" icon="el-icon-search" @click='searchDefault' size="medium"></el-button>-->
-<!--              </el-input>-->
-<!--            </el-form-item>-->
-<!--            <div class="clear"></div>-->
-<!--          </el-form>-->
         </div>
       </el-header>
       <el-main>
@@ -21,33 +13,22 @@
             <el-col :span="16"><div class="title">{{title}}</div></el-col>
             <el-col :span="8"><div class="send_time">{{send_time}}</div></el-col>
           </el-row>
-          <el-divider></el-divider>
           <el-row>
-            <el-col :span="24"><div class="content">{{content}}</div></el-col>
-          </el-row>
-          <el-divider></el-divider>
-          <el-row>
-            <el-col :span="6"><div class="sender">作者：{{sender}}</div></el-col>
-            <el-col :span="6"><div class="partition">版面：{{partition}}</div></el-col>
-            <el-col :span="6"><div class="reply_count">回帖数：{{reply_count}}</div></el-col>
+            <el-divider></el-divider>
+              <el-col :span="4">
+                <el-row><div class="sender" style="letter-spacing: 0.064em;">作者  {{sender}}</div></el-row>
+                <el-row><div class="partition" style="letter-spacing: 0.064em;">版面  {{partition}}</div></el-row>
+                <el-row><div class="reply_count" style="letter-spacing: 0.064em;">回帖数  {{reply_count}}</div></el-row>
+                <el-row><br class="reply_count" style="letter-spacing: 0.064em;">原帖地址 {{url}}</el-row>
+              </el-col>
+              <el-col :span="20"><div class="content" v-html="content"></div></el-col>
           </el-row>
         </el-card>
-<!--        <div v-for="art in articleListData" :key="art.id">-->
-<!--          <el-card class="box-card" shadow="hover">-->
-<!--            <el-row :gutter="20">-->
-<!--              <el-col :span="16"><div class="title">{{art.title}}</div></el-col>-->
-<!--              <el-col :span="8"><div class="send_time">{{art.send_time}}</div></el-col>-->
-<!--            </el-row>-->
-<!--            <el-row>-->
-<!--              <el-col :span="24"><div class="content">{{art.content}}</div></el-col>-->
-<!--            </el-row>-->
-<!--            <el-row>-->
-<!--              <el-col :span="6"><div class="sender">作者：{{art.sender}}</div></el-col>-->
-<!--              <el-col :span="6"><div class="partition">版面：{{art.partition}}</div></el-col>-->
-<!--              <el-col :span="6"><div class="reply_count">回帖数：{{art.reply_count}}</div></el-col>-->
-<!--            </el-row>-->
-<!--          </el-card>-->
-<!--        </div>-->
+        <div v-for="art in articleListData" :key="art.id">
+          <el-card class="reply" >
+            <el-col :span="24"><div class="content" style="font-size: 18px;padding-bottom: 18px;">{{art.content}}</div></el-col>
+          </el-card>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -57,9 +38,12 @@
 export default {
   name: 'ArticlePage',
   data () {
+    // var striphtml = require('js-striphtml')
     return {
       articleId: 'Kr_5fHEBWwJHAQ4W06II',
-      content: '发信人: buptvis (大数据可视化), 信区: Visualization 标 题: 【可视化案例】Life in the camps 集中营里的生活 发信站: 北邮人论坛 (Mon Oct 21 21:52:29 2019), 站内 Life in the camps 集中营里的生活 孟加拉国罗辛亚难民区泥泞的山坡上挤满了临时搭建的棚屋，附近的厕所污染了水井，容易迅速传播疾病。卫生专家表示，罗辛亚难民区过度拥挤，卫生条件差，医疗服务有限，是“灾难的根源”。此项目是对居民临时避难所生活的近距离的观察和发现。从地理位置宏观的角度分析居民健康与生活设施分布的联系。 数据来源：[未开放]Inter Sector Coordination Group (ISCG) 部门间协调小组；REACH Initiative；OpenStreetMap；World Health Organization世界卫生组织；UNHCR;难民署；Reuters路透社 数据维度: 孟加拉国地图(卫星图像) Kutupalong扩建点的防护卫星图，避难所的区域信息 厕所分布坐标(数据由联合国移民机构 IOM 收集和分析) 临时厕所的坐标，距离厕所太远和太近的收容所区域信息 露天排便区的坐标 水泵的坐标 霍乱产生的疾病类型所占人数百分比 欧乱时期每日死亡人数以及死因 维度映射: 作品主要在平面上用坐标映射成点，直观反映设施的分布情况； 简单的面积比例图和柱形图清晰反映死亡比例和人数，用不同的颜色对疾病进行分类。 设计点: 网页+滚动动效的形式来讲故事，一段段图文结合达到阅读故事的效果，动效增加互动感； 桌面调研、实地调研、专家建议、结合可视化图形传递事实，充分体现作品的完整性和故事的真实性。 -- ※ 来源:·北邮人论坛 http://bbs.byr.cn ·[FROM: 10.128.195.*]',
+      // content: '发信人: buptvis (大数据可视化)\n信区: Visualization\n标 题: 【可视化案例】Life in the camps 集中营里的生活\n发信站: 北邮人论坛 (Mon Oct 21 21:52:29 2019), 站内 Life in the camps 集中营里的生活\n孟加拉国罗辛亚难民区泥泞的山坡上挤满了临时搭建的棚屋，附近的厕所污染了水井，容易迅速传播疾病。卫生专家表示，罗辛亚难民区过度拥挤，卫生条件差，医疗服务有限，是“灾难的根源”。此项目\n是对居民临时避难所生活的近距离的观察和发现。从地理位置宏观的角度分析居民健康与生活设施分布的联系。 \n数据来源：[未开放]Inter Sector Coordination Group (ISCG) 部门间协调小组；REACH Initiative；OpenStreetMap；World Health Organization世界卫生组织；UNHCR;难民署；Reuters路透社\n数据维度: 孟加拉国地图(卫星图像) Kutupalong扩建点的防护卫星图，避难所的区域信息 厕所分布坐标(数据由联合国移民机构 IOM 收集和分析) 临时厕所的坐标，距离厕所太远和太近的收容所区域信息 露天排便区的坐标\n水泵的坐标 霍乱产生的疾病类型所占人数百分比 欧乱时期每日死亡人数以及死因 维度映射: 作品主要在平面上用坐标映射成点，直观反映设施的分布情况； 简单的面积比例图和柱形图清晰反映死亡比例和人数，用不同的颜色\n对疾病进行分类。 设计点: 网页+滚动动效的形式来讲故事，一段段图文结合达到阅读故事的效果，动效增加互动感； 桌面调研、实地调研、专家建议、结合可视化图形传递事实，充分体现作品的完整性和故事的真实性。 \n-- ※ 来源:·北邮人论坛 http://bbs.byr.cn ·[FROM: 10.128.195.*]',
+      // content: striphtml.striptags('发信人: jay1427 (咖啡有癮), 信区: SCS<br>标&nbsp;&nbsp;题: 【校招】阿里巴巴数据技术及产品部<br>发信站: 北邮人论坛 (Fri Mar 15 15:53:09 2019), 站内<br><br><a target="_blank" href="http://img.alicdn.com/tfs/TB129NnMkvoK1RjSZFNXXcxMVXa-1500-6270.jpg"><img title="单击此在新窗口浏览图片" src="http://img.alicdn.com/tfs/TB129NnMkvoK1RjSZFNXXcxMVXa-1500-6270.jpg" alt="http://img.alicdn.com/tfs/TB129NnMkvoK1RjSZFNXXcxMVXa-1500-6270.jpg" class="resizeable" style="width: 590px;" border="0"></a><br><br>p.s.同时诚邀P7及以上Java大牛：shengfeng.lsf@alibaba-inc.com<br><br>--<br><br><font class="f000"></font><font class="f003">※ 来源:·北邮人论坛 <a target="_blank" href="http://bbs.byr.cn">http://bbs.byr.cn</a>·[FROM: 106.11.34.*]</font><font class="f000"><br></font>', ['b']),
+      content: '发信人: children (Someone), 信区: Talking<br>标&nbsp;&nbsp;题: Re: 付费求大佬论文讲解<br>发信站: 北邮人论坛 (Wed Jun 10 13:51:31 2020), 站内<br><br>妹子吗？<br>【 在 loveyou1 的大作中提到: 】<br><font class="f006">: 我有门课的教学视频是深度学习零基础入门，结课作业是10天复现5篇论文。 </font><br><font class="f006">: 我是传统工科研一，目前在偷偷实习，没有学术要求只求毕业。昨天开始捣鼓github，安装个tensorflow都报错真的急哭了！！！和师兄师姐又不太熟真的找不到人可以问了 </font><br><font class="f006">: 汇报要求：理论，技术或代码实现，demo展现 </font><br><font class="f006">: ................... </font><br><br>--<br><br><font class="f000"></font><font class="f007">※ 来源:·北邮人论坛 <a target="_blank" href="http://bbs.byr.cn">http://bbs.byr.cn</a>·[FROM: 167.220.232.*]</font><font class="f000"><br></font>',
       partition: 'Visualization',
       reply_count: 3,
       send_time: '2019-10-21',
@@ -147,6 +131,9 @@ export default {
     float: left;
     margin: 20px auto;
   }
+  #articlePage .reply {
+    border-radius: 20px;
+  }
   #articlePage .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
     margin-bottom: 0;
   }
@@ -222,8 +209,8 @@ export default {
   }
   #articlePage .content {
     line-height: 1.6;
-    height: 200px;
-    overflow-y: scroll;
+    height: auto;
+    /*overflow-y: scroll;*/
     font-size: 14px;
     letter-spacing: 0.069em;
     font-weight: 300;
