@@ -9,23 +9,6 @@
             </el-input>
           </el-form-item>
           <div class="clear"></div>
-<!--          <el-form-item class="sortRole">-->
-<!--            <el-button type="text" icon="el-icon-sort-down" @click='searchDefault'>相关性</el-button>-->
-<!--            <el-button type="text" icon="el-icon-sort-down" @click='searchTime'>时间</el-button>-->
-<!--            <el-button type="text" icon="el-icon-sort-down" @click='searchReplyCount'>回复数</el-button>-->
-<!--          </el-form-item>-->
-<!--          <el-form-item class="sortRole">-->
-<!--            <el-date-picker-->
-<!--              v-model="timeRange"-->
-<!--              type="daterange"-->
-<!--              align="right"-->
-<!--              unlink-panels-->
-<!--              range-separator="至"-->
-<!--              start-placeholder="开始日期"-->
-<!--              end-placeholder="结束日期"-->
-<!--              :picker-options="pickerOptions">-->
-<!--            </el-date-picker>-->
-<!--          </el-form-item>-->
         </el-form>
       </div>
       <div class="main">
@@ -39,7 +22,7 @@
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item><el-button type="text" command="相关性" @click='searchLatestReplyTime'>新鲜度</el-button></el-dropdown-item>
                   <el-dropdown-item><el-button type="text" command="时间" @click='searchTime'>时间</el-button></el-dropdown-item>
-                  <el-dropdown-item><el-button type="text" command="回复数" @click='searchReplyCount'>回复数</el-button></el-dropdown-item>
+                  <el-dropdown-item><el-button type="text" command="回帖数" @click='searchReplyCount'>回复数</el-button></el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </el-col>
@@ -72,7 +55,8 @@
             <el-card shadow="hover">
               <el-row :gutter="20">
                 <el-col :span="16">
-                  <div><el-link class="title" @click="showArticle(art.id)" :underline="true">
+                  <div><el-link class="title" @click="showArticle(art.id,art.url)" target="_blank"  :underline="true">
+<!--                  <div><el-link class="title" href=art.url :underline="true">-->
                     <div v-html="highlights(art.title)"></div>
                   </el-link></div>
                 </el-col>
@@ -84,7 +68,7 @@
               </el-row>
               <el-row>
                 <el-col :span="6"><div class="sender">作者：{{art.sender}}</div></el-col>
-                <el-col :span="6"><div class="partition">版面：{{art.partition}}</div></el-col>
+                <el-col :span="8"><div class="partition">版面：{{art.partion}}</div></el-col>
                 <el-col :span="6"><div class="reply_count">回帖数：{{art.reply_count}}</div></el-col>
               </el-row>
             </el-card>
@@ -97,7 +81,7 @@
             </div>
             <div v-for="(item, index) in hotListData" :key="index">
               <div>
-                <el-link :underline="false" @click="showArticle(hotListData[index].id)">
+                <el-link :underline="false" @click="showArticle(hotListData[index].id,hotListData[index].url)">
                   <span class="indexIcon">{{index + 1}}</span>{{ hotListData[index].title}}
                 </el-link>
               </div>
@@ -161,84 +145,86 @@ export default {
       timeRange: ['', ''],
       startTime: '',
       endTime: '',
-      articleListData: [
-        {
-          id: '1',
-          title: '张文宏谈五一假期出游',
-          send_time: '2019-10-21',
-          sender: 'buptvis',
-          reply_count: 3,
-          partition: 'Visualization',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '2',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '3',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '4',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '5',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '6',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '7',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '8',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '9',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }, {
-          id: '10',
-          title: '张文宏谈五一假期出游',
-          content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
-        }],
-      hotListData: [
-        {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }, {
-          id: '1',
-          title: '张文宏谈五一假期出游'
-        }],
+      articleListData: [],
+      hotListData: [],
+      // articleListData: [
+      //   {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游',
+      //     send_time: '2019-10-21',
+      //     sender: 'buptvis',
+      //     reply_count: 3,
+      //     partition: 'Visualization',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '2',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '3',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '4',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '5',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '6',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '7',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '8',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '9',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }, {
+      //     id: '10',
+      //     title: '张文宏谈五一假期出游',
+      //     content: '随着北京朝阳区疫情风险等级降为低风险,全国已无高风险地区的好消息让不少人摩拳擦掌,准备五一出游好好放飞自己'
+      //   }],
+      // hotListData: [
+      //   {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }, {
+      //     id: '1',
+      //     title: '张文宏谈五一假期出游'
+      //   }],
       currentPage: 1, // 当前页数
       totalArticle: 100, // 总条数
       PageSize: 10
@@ -423,7 +409,8 @@ export default {
     },
     // 高亮关键字
     highlights (val) {
-      // console.log(val + ' 变色')
+      // console.log('帖子内容：')
+      // console.log(val)
       val = val + ''
       const replaceReg = new RegExp(this.keyWord, 'g')
       if (val.indexOf(this.keyWord) !== -1 && this.keyWord !== '') {
@@ -432,14 +419,15 @@ export default {
         return val
       }
     },
-    showArticle (articleId) {
-      console.log('入参：')
-      console.log(articleId)
+    showArticle (articleId, url) {
+      console.log('点击' + articleId)
+      // window.open(url)
+      // window.location.href = url
       this.$http.get('bbs/addSearchNums', { params: { id: articleId } })
-      // .then(response => {
-      //   console.log('返回：')
-      //   console.log(response)
-      // })
+        .then(response => {
+          console.log('返回：')
+          console.log(response)
+        })
       this.$router.push(
         {
           name: 'ArticlePage',

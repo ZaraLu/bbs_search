@@ -42,7 +42,7 @@
           </div>
           <div v-for="(item, index) in newListData" :key="index">
             <div>
-              <el-link :underline="false" @click="showArticle(newListData[index].id)">
+              <el-link :underline="false" @click="showArticle(newListData[index].id, newListData[index].url)">
                 <span class="indexIcon">{{index + 1}}</span>{{ newListData[index].title}}
               </el-link>
             </div>
@@ -57,7 +57,7 @@
           </div>
           <div v-for="(item, index) in hotListData" :key="index">
             <div>
-              <el-link :underline="false" @click="showArticle(hotListData[index].id)">
+              <el-link :underline="false" @click="showArticle(hotListData[index].id, newListData[index].url)">
                 <span class="indexIcon">{{index + 1}}</span>{{ hotListData[index].title}}
               </el-link>
             </div>
@@ -152,7 +152,7 @@ export default {
     // 访问热搜榜接口，取前10条
     this.$http.get('bbs/getTop10Byrs').then(response => {
       this.hotListData = []
-      console.log(response)
+      // console.log(response)
       var listData = response.data
       for (let i = 0; i < 10; i++) {
         this.hotListData.push(listData[i].body)
@@ -215,11 +215,13 @@ export default {
       this.$router.push({ name: 'listPage', params: { keyWord: this.keyWord } })
     },
 
-    showArticle (articleId) {
-      // console.log(articleId)
+    showArticle (articleId, url) {
+      console.log('点击' + articleId)
       // this.$http.get('bbs/findById', { params: { id: articleId } }).then(response => {
       //   console.log(response)
       // })
+      this.$http.get('bbs/addSearchNums', { params: { id: articleId } })
+      // window.open(url)
       this.$router.push({ name: 'ArticlePage', params: { articleId: articleId } })
     }
   },
@@ -285,7 +287,7 @@ export default {
   }
   #indexSearch {
     text-align: center;
-    padding-top: 80px;
+    padding-top: 40px;
     /*background-color: lightblue;*/
     height: 100%;
   }
