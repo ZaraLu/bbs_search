@@ -19,17 +19,17 @@
               <el-row><div class="sender" style="letter-spacing: 0.064em;">作者  {{sender}}</div></el-row>
               <el-row><div class="partition" style="letter-spacing: 0.064em;">版面  {{partition}}</div></el-row>
               <el-row><div class="reply_count" style="letter-spacing: 0.064em;">回帖数  {{reply_count}}</div></el-row>
-              <el-row><br class="reply_count" style="letter-spacing: 0.064em;">原帖地址 {{url}}</el-row>
+<!--              <el-row><br class="reply_count" style="letter-spacing: 0.064em;">原帖地址 {{url}}</el-row>-->
             </el-col>
-            <el-col :span="20"><div class="content" v-html="content"></div></el-col>
+            <el-col :span="20"><div class="content"><pre>{{content}}</pre></div></el-col>
           </el-row>
         </el-card>
-        <div v-for="art in comments" :key="art.id">
+<!--        <div v-for="art in comments" :key="art.id">-->
 <!--        <div v-for="art in articleListData" :key="art.id">-->
-          <el-card class="reply" >
-            <el-col :span="24"><div style="font-size: 18px;padding-bottom: 18px;">{{art.content}}</div></el-col>
-          </el-card>
-        </div>
+        <el-card class="reply" >
+          <el-col :span="24"><div style="font-size: 18px;padding-bottom: 18px;">{{comments}}</div></el-col>
+        </el-card>
+<!--        </div>-->
       </el-main>
     </el-container>
   </div>
@@ -114,6 +114,8 @@ export default {
         this.partition = article.partion
         this.comments = article.comments
       })
+    console.log('评论：')
+    console.log(this.comments)
     // console.log(this.$route.params.pageParams)
   },
   methods: {
