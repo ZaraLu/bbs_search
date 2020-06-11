@@ -346,9 +346,9 @@ export default {
         const objData = response.data
         // console.log(objData)
         this.articleListData = []
-        for (let i = 0; i < objData.content.length; i++) {
+        for (let i = 0; i < objData.data.data.length; i++) {
           // console.log(arrData.data.data[i])
-          this.articleListData.push(objData.content[i])
+          this.articleListData.push(objData.data.data[i])
         }
         this.totalArticle = objData.totalElements
         this.highlights()

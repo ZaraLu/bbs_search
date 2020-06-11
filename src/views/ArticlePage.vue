@@ -21,15 +21,15 @@
               <el-row><div class="reply_count" style="letter-spacing: 0.064em;">回帖数  {{reply_count}}</div></el-row>
               <el-row><el-link @click="gotoOrigin" style="letter-spacing: 0.064em;">原帖地址</el-link></el-row>
             </el-col>
-            <el-col :span="18"><div class="content" v-html="content"></div></el-col>
+<!--            <el-col :span="18"><div class="content" v-html="content"></div></el-col>-->
           </el-row>
         </el-card>
-<!--        <div v-for="art in comments" :key="art.id">-->
+        <div v-for="art in comments" :key="art.id">
 <!--        <div v-for="art in articleListData" :key="art.id">-->
         <el-card class="reply" >
-          <el-col :span="24"><div style="font-size: 18px;padding-bottom: 18px;"  v-html="comments"></div></el-col>
+          <el-col :span="24"><div style="font-size: 18px;padding-bottom: 18px;"  v-html="art"></div></el-col>
         </el-card>
-<!--        </div>-->
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -110,9 +110,9 @@ export default {
         this.send_time = article.send_time
         this.reply_count = article.reply_count
         this.latest_reply_time = article.latest_reply_time
-        // this.content = article.content
+        this.content = article.content
         this.partition = article.partion
-        // this.comments = article.comments
+        this.comments = article.comments
         // console.log('帖子：')
         // console.log(article)
       })
