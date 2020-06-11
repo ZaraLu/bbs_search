@@ -14,12 +14,15 @@
             <el-col :span="8"><div class="send_time">{{send_time}}</div></el-col>
           </el-row>
           <el-row>
-            <div class="sender" style="letter-spacing: 0.107em;font-size: 14px;font-weight: 300;font-family: 隶书">{{sender}}在{{partition}}这个版面水了一贴……，居然有{{reply_count}}个人理TA</div>
+            <div class="sender" style="letter-spacing: 0.107em;font-size: 14px;font-weight: 300;">
+              <a>{{sender}}</a> 在 <a>{{partition}}</a> 这个版面水了一贴……，居然有 <a>{{reply_count}}</a> 个人理TA
+            </div>
 <!--            <el-col :span="6"><div class="sender" align="right" style="letter-spacing: 0.064em;">{{sender}}在</div></el-col>-->
 <!--            <el-col :span="6"><div class="partition" style="letter-spacing: 0.064em;">{{partition}}这个版面</div></el-col>-->
 <!--            <el-col :span="6"><div class="reply_count" style="letter-spacing: 0.064em;">回帖数  {{reply_count}}</div></el-col>-->
-            <el-col :span="6"><el-link @click="gotoOrigin" style="letter-spacing: 0.064em;color: #1E90FF">点我看原帖</el-link></el-col>
+
             <el-divider></el-divider>
+            <el-col :span="24" align="center"><el-link @click="gotoOrigin" style="letter-spacing: 0.064em;color: #1E90FF">点我看原帖</el-link></el-col>
 <!--            <el-col :span="18"><div class="content" v-html="content"></div></el-col>-->
           </el-row>
         </el-card>
@@ -651,5 +654,18 @@ export default {
   #a_cross .warning span {
     color:red;
     padding-right:0
+  }
+  #articlePage .sender > a:nth-child(1) {
+    font-weight: 800;
+  }
+  #articlePage .sender > a:nth-child(2) {
+    font-weight: 800;
+  }
+  #articlePage .sender > a:nth-child(3) {
+    font-weight: 800;
+  }
+  #articlePage .el-divider {
+    margin-bottom: 0px;
+    margin-top: 0px;
   }
 </style>
