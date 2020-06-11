@@ -1,5 +1,6 @@
 <template xmlns:el-col="http://www.w3.org/1999/html">
     <div id="listPage">
+      <el-backtop></el-backtop>
       <div class="head">
         <img class="log" src="../assets/logo1.png" @click="backToIndex">
         <el-form size='mini' :inline='true' @submit.native.prevent>
@@ -317,7 +318,7 @@ export default {
           // console.log(arrData.data.data[i])
           this.articleListData.push(objData.data[i])
         }
-        this.totalArticle = objData.totleElements
+        this.totalArticle = objData.totalElements
         this.highlights()
       })
     },
@@ -381,7 +382,7 @@ export default {
           // console.log(arrData.data.data[i])
           this.articleListData.push(objData.data[i])
         }
-        this.totalArticle = objData.totleElements
+        this.totalArticle = objData.totalElements
         this.highlights()
       })
     },
