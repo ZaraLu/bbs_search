@@ -14,13 +14,12 @@
             <el-col :span="8"><div class="send_time">{{send_time}}</div></el-col>
           </el-row>
           <el-row>
+            <div class="sender" style="letter-spacing: 0.107em;font-size: 14px;font-weight: 300;font-family: 隶书">{{sender}}在{{partition}}这个版面水了一贴……，居然有{{reply_count}}个人理TA</div>
+<!--            <el-col :span="6"><div class="sender" align="right" style="letter-spacing: 0.064em;">{{sender}}在</div></el-col>-->
+<!--            <el-col :span="6"><div class="partition" style="letter-spacing: 0.064em;">{{partition}}这个版面</div></el-col>-->
+<!--            <el-col :span="6"><div class="reply_count" style="letter-spacing: 0.064em;">回帖数  {{reply_count}}</div></el-col>-->
+            <el-col :span="6"><el-link @click="gotoOrigin" style="letter-spacing: 0.064em;color: #1E90FF">点我看原帖</el-link></el-col>
             <el-divider></el-divider>
-            <el-col :span="6">
-              <el-row><div class="sender" style="letter-spacing: 0.064em;">作者  {{sender}}</div></el-row>
-              <el-row><div class="partition" style="letter-spacing: 0.064em;">版面  {{partition}}</div></el-row>
-              <el-row><div class="reply_count" style="letter-spacing: 0.064em;">回帖数  {{reply_count}}</div></el-row>
-              <el-row><el-link @click="gotoOrigin" style="letter-spacing: 0.064em;">原帖地址</el-link></el-row>
-            </el-col>
 <!--            <el-col :span="18"><div class="content" v-html="content"></div></el-col>-->
           </el-row>
         </el-card>
